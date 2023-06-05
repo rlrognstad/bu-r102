@@ -1,0 +1,5 @@
+https://www.htmlwidgets.org/showcase_leaflet.html
+https://github.com/rstudio/cheatsheets/blob/main/shiny.pdf
+https://shiny.posit.co/r/gallery/widgets/widget-gallery/
+https://plotly.com/r/
+https://deanattali.com/shinyjs/
