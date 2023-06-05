@@ -47,6 +47,14 @@ checkboxGroupInput(inputId = "checkbox_group",
                                "R&D" = "research",
                                "Sales" = "sales"),
                    selected = c("marketing", "research", "sales"))
+
+dateRangeInput(inputId = "date_range",
+               label = h4("Date Range"),
+               start = "2019-01-01",
+               end = today(),
+               min = min(sales_data_tbl$date),
+               max = max(sales_data_tbl$date),
+               startview = "year")
 ```
 
 
@@ -70,7 +78,8 @@ textOutput(outputId = "checkbox_values")
 ### Section - Date Range
 
 ```{r}
-
+output$date_range_values <- renderPrint(input$date_range)
+textOutput(outputId = "date_range_values")
 ```
 
 ### Section - Slider Output
