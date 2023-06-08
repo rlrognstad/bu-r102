@@ -2,7 +2,7 @@
 title: "Sales Dashboard"
 output: 
   flexdashboard::flex_dashboard:
-    orientation: columns
+    orientation: rows
     vertical_layout: fill
 runtime: shiny
 ---
@@ -146,10 +146,52 @@ processed_data_filtered_tbl <- eventReactive(eventExpr = input$apply,
     ignoreNULL = FALSE)
 ```
 
+Row {data-hieght=150}
+---------------------------------------------------------------
+```{r}
+summary_values_tbl <- reactive({processed_data_filtered_tbl() %>%
+  summarize(health_metric = unique(order.id) %>% length(),
+            wealth_metric = sum(extended_price),
+            wise_metric = (sum(str_detect(category_1, "Mountain")) / sum(str_detect(category_1, "Road")) + 0.0001) %>% round(1))%>%
+  mutate(health_metric = health_metric %>% scales::number(big.mark = ","),
+         wealth_metric = wealth_metric %>% scales::dollar(scale = 1e-6, accuracy = 0.1, suffix = "M"))})
 
 
+```
 
-Column {data-width=1000}
+### Healthy
+```{r}
+renderValueBox({
+  valueBox(value = summary_values_tbl()$health_metric, 
+           caption = "Orders", 
+           icon = "fa-heartbeat", 
+           color = "success")
+})
+
+```
+
+### Wealthy
+```{r}
+renderValueBox({
+  valueBox(value = summary_values_tbl()$wealth_metric, 
+           caption = "Sales", 
+           icon = "fa-money-check-alt", 
+           color = "primary")
+})
+
+```
+### Wise
+```{r}
+renderValueBox({
+  valueBox(value = summary_values_tbl()$wise_metric, 
+           caption = "Ration, Mountain to Road", 
+           icon = "fa-brain", 
+           color = "info")
+})
+
+```
+
+Row {data-hieght=850}
 ---------------------------------------------------------------
 
 ### By State
@@ -201,8 +243,6 @@ plotlyOutput(outputId = "plotly_1")
 
 ```
 
-Column {data-width=400}
----------------------------------------------------------------
 ### Over Time
 
 ```{r}
